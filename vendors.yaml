@@ -1,0 +1,234 @@
+# =====================================================================
+#  VENDORS
+# =====================================================================
+# How to read this file:
+#
+#   reset:        weekly, monthly, daily, or static
+#                 (static vendors never restock on their own; they only
+#                 post when you run the workflow by hand)
+#   reset_day:    weekly: a weekday name (monday ... sunday)
+#                 monthly: a day of the month (1-31; 31 means "last day")
+#   webhook_secret: the name of the GitHub secret holding this channel's
+#                 webhook URL (see SETUP.md)
+#   thread_id:    only needed if the vendor is a post in a Forum channel.
+#                 Right-click the post > Copy Link; the last number is the ID.
+#   image_url:    must be a permanent link. Discord attachment links expire,
+#                 so put the picture in this repo's images/ folder and use its
+#                 raw GitHub link (see SETUP.md).
+#   budget:       a number ("10000"), a dice roll ("2D6*1000+1D1000"),
+#                 or any text ("CAN NOT BUY"). Leave blank to hide it.
+#
+# Each section has:
+#   title:   the italic heading (Armor, Weapons, ...)
+#   count:   how many items to pick from the pool (dice allowed: "1D3+3")
+#   always:  items that are always in stock (optional)
+#   pool:    items that might be in stock
+#     weight: how likely compared to the others (default 1; 2 = twice as
+#             likely, 0.5 = half as likely)
+#     qty:    how many are in stock (default 1; dice allowed: "1D3")
+#
+# Dice: "2D" or "2D6" = two six-sided dice, "1D3" = 1 to 3, "1D100", etc.
+# You can add, subtract and multiply: "2D6*1000+1D1000".
+# =====================================================================
+
+timezone: America/Chicago
+
+vendors:
+
+  # -------------------------------------------------------------------
+  jacks_shack:
+    name: "Jack's Shack"
+    enabled: true
+    reset: monthly
+    reset_day: 1
+    webhook_secret: JACKS_SHACK_WEBHOOK
+    thread_id: ""
+    username: "Jack's Shack"
+    avatar_url: ""
+    image_url: ""
+    delete_previous: false
+    header: >-
+      Out beyond the edges of Oakbridge in the woods lies a ramshackle hand
+      built shack with a jury rigged neon sign saying "Jack's Shack" above the
+      counter are some displays showing what is for sale today as well as a
+      warning that all sales are final.
+    notes: >-
+      Restocks Monthly, and any time an item is purchased here an average luck
+      check must be made to see if it has Proto or Retrotech Quirks.
+    budget: "10000"
+    budget_label: "Monthly Purchasing Budget"
+    sections:
+      - title: Armor
+        count: "1D2+1"
+        pool:
+          - { name: "Lightweight Poly Carapace" }
+          - { name: "HEV Suit (TL9)" }
+          - { name: "Combat Armor (TL10)", weight: 0.5 }
+          - { name: "Flak Jacket", weight: 2 }
+          - { name: "Mesh", weight: 2 }
+          - { name: "Cloth", weight: 2 }
+          - { name: "Ablat" }
+          - { name: "Reflec", weight: 0.5 }
+          - { name: "Ballistic Vest", weight: 2 }
+          - { name: "Vacc Suit" }
+      - title: Weapons
+        count: "1D3+3"
+        pool:
+          - { name: "Static Maul" }
+          - { name: "Chaindrive Sword" }
+          - { name: "Monoblade", weight: 0.5 }
+          - { name: "Stunstick", weight: 2 }
+          - { name: "Gauss Pistol", weight: 0.5 }
+          - { name: "Gauss Assault Gun", weight: 0.5 }
+          - { name: "Cartridge Laser Carbine" }
+          - { name: "Laser Pistol" }
+          - { name: "Autopistol", weight: 2 }
+          - { name: "Revolver", weight: 2 }
+          - { name: "Snub Pistol", weight: 2 }
+          - { name: "Shotgun", weight: 2 }
+          - { name: "Assault Rifle" }
+          - { name: "Autorifle" }
+          - { name: "Accelerator Rifle", weight: 0.5 }
+
+  # -------------------------------------------------------------------
+  ravenfort_black_market:
+    name: "Ravenfort Black Market"
+    enabled: true
+    reset: monthly
+    reset_day: 1
+    webhook_secret: RAVENFORT_WEBHOOK
+    thread_id: ""
+    username: "Ravenfort Black Market"
+    avatar_url: ""
+    image_url: ""
+    delete_previous: false
+    header: >-
+      Nestled in the center of one of the many housing blocks in Ravenfort lies
+      a simple park that, by day, appears to be nothing more than a quiet
+      public space. By night, however, it becomes a bustling market of illicit
+      traders and black marketeers, ready to sell whatever illegal goods one
+      might need to acquire. Whatever one needs, the market provides.
+    notes: >-
+      Restocks Monthly, and any time an item is purchased here an average Luck
+      check must be made to see if it has Proto or Retrotech Quirks. All Prices
+      are increased from the CSC by 50% due to their illicit nature.
+    budget: ""
+    sections:
+      - title: Weapons
+        count: "1D3+4"
+        pool:
+          - { name: "Body Pistol", weight: 2 }
+          - { name: "Flechette Pistol", weight: 2 }
+          - { name: "Snub Pistol", weight: 2 }
+          - { name: "Gauss Pistol" }
+          - { name: "Gauss Assault Gun" }
+          - { name: "Gauss Rifle" }
+          - { name: "Laser Pistol" }
+          - { name: "Laser Carbine" }
+          - { name: "Laser Rifle" }
+          - { name: "Submachine Gun", weight: 2 }
+          - { name: "Grenade Launcher", weight: 0.5 }
+          - { name: "Rocket Launcher", weight: 0.25 }
+          - { name: "Stagger Laser", weight: 0.5 }
+      - title: Armor
+        count: "1D3+3"
+        pool:
+          - { name: "Flak Jacket", weight: 2, qty: "1D2" }
+          - { name: "Mesh", weight: 2 }
+          - { name: "Jack", weight: 2 }
+          - { name: "Cloth", weight: 2 }
+          - { name: "Ablat" }
+          - { name: "Reflec" }
+          - { name: "Combat Armor" }
+          - { name: "Battle Dress (Basic TL13)", weight: 0.25 }
+          - { name: "Personal Energy Shield", weight: 0.5 }
+      - title: Drugs
+        count: "1D3+3"
+        pool:
+          - { name: "Combat Drug", qty: "1D3" }
+          - { name: "Fast Drug", qty: "1D3" }
+          - { name: "Slow Drug", qty: "1D3" }
+          - { name: "Adrenaliser", qty: "1D3" }
+          - { name: "G-Tolerance Drug", qty: "1D3" }
+          - { name: "Inhibitor Drug", qty: "1D2" }
+          - { name: "Titan Drug", qty: "1D2", weight: 0.5 }
+          - { name: "Anagathics", weight: 0.5 }
+          - { name: "Psychite", qty: "1D3", weight: 2 }
+          - { name: "Go-Juice", qty: "1D3" }
+          - { name: "Luciferium", weight: 0.25 }
+
+  # -------------------------------------------------------------------
+  mek_kanik_shop:
+    name: "Mek-Kanik Shop"
+    enabled: true
+    reset: weekly
+    reset_day: monday
+    webhook_secret: MEK_KANIK_WEBHOOK
+    thread_id: ""
+    username: "Mek-Kanik"
+    avatar_url: ""
+    image_url: ""
+    delete_previous: false
+    header: "Mek-Kanik's Shop for all your mechanical needs. Restocks weekly."
+    stock_label: "This Week's Stock:"
+    budget: "10000"
+    budget_label: "Monthly Purchasing Budget"
+    footer: "Note: Can not buy weapons."
+    sections:
+      - title: Armor
+        count: "1D2"
+        pool:
+          - { name: "Diplo Vest" }
+          - { name: "Ablat" }
+          - { name: "Ballistic Vest" }
+          - { name: "Cloth" }
+          - { name: "Vacc Suit", weight: 0.5 }
+      - title: Tools
+        count: "1D3+1"
+        pool:
+          - { name: "Mechanical Tool Set", weight: 2, qty: "1D3" }
+          - { name: "Electronics Tool Set", weight: 2 }
+          - { name: "Tool Laser" }
+          - { name: "Engineering Tool Set" }
+          - { name: "Metalwork Tool Set" }
+          - { name: "Carpentry Tool Set" }
+          - { name: "Excavation Tool Set", weight: 0.5 }
+          - { name: "Rescue Tool Set", weight: 0.5 }
+
+  # -------------------------------------------------------------------
+  oakbridge_grocery:
+    name: "Oakbridge Grocery"
+    enabled: true
+    reset: static          # same stock every day; only posts when run by hand
+    webhook_secret: OAKBRIDGE_GROCERY_WEBHOOK
+    thread_id: ""
+    username: "Oakbridge Grocery"
+    avatar_url: ""
+    image_url: ""
+    delete_previous: false
+    header: "A very basic grocery store for rations and other basic supplies. Stock is the same every day."
+    stock_label: "Stock:"
+    budget: "CAN NOT BUY"
+    budget_label: "Monthly Purchasing Budget"
+    sections:
+      - show_quantity: false
+        always:
+          - "Survival Meals (all TLs)"
+          - "Rope (Both TL5 and TL9)"
+          - "Sleeping Bags"
+          - "Survival Kit (All TLs)"
+          - "Torches"
+          - "Hiking Boots (All TLs)"
+          - "Magnetic Compass"
+          - "Pocket Saw"
+          - "Gas/Oil Lamps"
+          - "Flare Launcher"
+          - "Distress Flare"
+          - "Flares"
+          - "Fire Extinguisher"
+          - "Field Kit (TL 8)"
+          - "Duct Tape"
+          - "Chemical Lightstick"
+          - "Canteen"
+          - "Backpacks (All TLs)"
+          - "Goggles/Shades (TL 7)"
