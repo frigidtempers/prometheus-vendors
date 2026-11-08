@@ -42,7 +42,7 @@ vendors:
     reset: monthly
     reset_day: 1
     webhook_secret: JACKS_SHACK_WEBHOOK
-    thread_id: ""
+    thread_id: "1552710188220424293"
     username: "Jack's Shack"
     avatar_url: ""
     image_url: ""
@@ -97,7 +97,7 @@ vendors:
     reset: monthly
     reset_day: 1
     webhook_secret: RAVENFORT_WEBHOOK
-    thread_id: ""
+    thread_id: "1557389133624778762"
     username: "Ravenfort Black Market"
     avatar_url: ""
     image_url: ""
@@ -164,7 +164,7 @@ vendors:
     reset: weekly
     reset_day: monday
     webhook_secret: MEK_KANIK_WEBHOOK
-    thread_id: ""
+    thread_id: "1552693236953518182"
     username: "Mek-Kanik"
     avatar_url: ""
     image_url: ""
@@ -201,7 +201,7 @@ vendors:
     enabled: true
     reset: static          # same stock every day; only posts when run by hand
     webhook_secret: OAKBRIDGE_GROCERY_WEBHOOK
-    thread_id: ""
+    thread_id: "1552695745826525194"
     username: "Oakbridge Grocery"
     avatar_url: ""
     image_url: ""
