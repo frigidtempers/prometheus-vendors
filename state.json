@@ -1,1 +1,26 @@
-{}
+{
+  "jacks_shack": {
+    "last_rolled": "2026-11-08",
+    "message_ids": [
+      "1569029703673585715"
+    ]
+  },
+  "mek_kanik_shop": {
+    "last_rolled": "2026-11-08",
+    "message_ids": [
+      "1569029706723106984"
+    ]
+  },
+  "oakbridge_grocery": {
+    "last_rolled": "2026-11-08",
+    "message_ids": [
+      "1569029709273104550"
+    ]
+  },
+  "ravenfort_black_market": {
+    "last_rolled": "2026-11-08",
+    "message_ids": [
+      "1569029704860573809"
+    ]
+  }
+}
