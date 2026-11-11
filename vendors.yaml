@@ -232,3 +232,98 @@ vendors:
           - "Canteen"
           - "Backpacks (All TLs)"
           - "Goggles/Shades (TL 7)"
+          
+  # -------------------------------------------------------------------
+  # Lowmarket uses the CSC Black Market rules instead of a fixed count.
+  # Every item in a black_market pool rolls for Availability each restock:
+  #   2D + streetwise + Law Level DM + Category DM + Availability DMs >= 8
+  # Category DMs:  1:+4  2:+2  3:+0  4:-2  5:-4  P (prohibited):-6
+  # Availability:  military: true  -2   |   specialised: true  -1
+  #                item TL above world_tl: 1-2 above -1, 3-4 -2, 5-9 -3, 10+ -5
+  #                fiat: any extra DM you want on one item (-3 to +3)
+  # Price = CSC price x category multiplier (1: x2, 2: x3, 3: x5, 4: x10,
+  # 5: x20, P: x20). If the roll misses by 1 or 2 the item is still offered,
+  # marked "scarce", at double or triple that price (set premium: false
+  # to turn this off).
+  lowmarket:
+    name: "Lowmarket"
+    enabled: true
+    reset: monthly
+    reset_day: 1
+    webhook_secret: LOWMARKET_WEBHOOK
+    thread_id: "1569180696470102156"
+    username: "Lowmarket"
+    avatar_url: ""
+    image_url: ""
+    delete_previous: false
+    header: >-
+      Deep in the swamps of the southwestern coast, a sprawl of stilt-shacks,
+      rusted barges and lantern-lit boardwalks rises out of the water. Nobody
+      asks where anything came from in Lowmarket, and nobody asks what you
+      want it for. If it's high-tech, illegal or both, someone here is selling
+      it, for a price.
+    notes: >-
+      Restocks Monthly. Prices follow the black market rules and change with
+      every restock. Everything sold here is the genuine article: no Proto or
+      Retrotech Quirks.
+    market:
+      law_level: 0        # Lowmarket has no law to speak of (DM+2)
+      world_tl: 9         # the TL items are compared against
+      streetwise: 0       # how well connected the sellers are (DM)
+      other_dm: 0         # Referee's fiat for the whole market
+      premium: true
+    budget: ""
+    sections:
+      - title: Weapons
+        mode: black_market
+        pool:
+          - { name: "Monoblade",              tl: 12, price: 2500,   category: 1 }
+          - { name: "Static Maul",            tl: 11, price: 650,    category: 1 }
+          - { name: "Stunner",                tl: 8,  price: 500,    category: 1 }
+          - { name: "Arc-Field Weapon",       tl: 14, price: 25000,  category: 4, military: true }
+          - { name: "Body Pistol",            tl: 8,  price: 500,    category: 2 }
+          - { name: "Magrail Pistol",         tl: 14, price: 750,    category: 3 }
+          - { name: "Gauss Pistol",           tl: 13, price: 500,    category: 4 }
+          - { name: "Gauss Submachinegun",    tl: 12, price: 1000,   category: 4, military: true }
+          - { name: "Gauss Assault Gun",      tl: 12, price: 1300,   category: 4 }
+          - { name: "Gauss Rifle",            tl: 12, price: 1500,   category: 4, military: true }
+          - { name: "Gauss Sniper Rifle",     tl: 12, price: 2500,   category: 4, military: true }
+          - { name: "Advanced Combat Rifle",  tl: 10, price: 1000,   category: 4, military: true }
+          - { name: "Laser Carbine (TL11)",   tl: 11, price: 4000,   category: 3 }
+          - { name: "Laser Rifle (TL11)",     tl: 11, price: 8000,   category: 3 }
+          - { name: "Laser Sniper Rifle",     tl: 12, price: 9000,   category: 4 }
+          - { name: "Stagger Laser Rifle",    tl: 12, price: 10000,  category: 4, military: true }
+          - { name: "Heavy Laser Rifle",      tl: 12, price: 14000,  category: 4, military: true }
+          - { name: "RAM Grenade Launcher",   tl: 8,  price: 800,    category: 4, military: true }
+          - { name: "PGHP-12",                tl: 12, price: 20000,  category: 5, military: true }
+          - { name: "FGHP-14",                tl: 14, price: 100000, category: 5, military: true }
+      - title: Armor
+        mode: black_market
+        pool:
+          - { name: "Cloth Jacket",               tl: 10, price: 500,    category: 3 }
+          - { name: "Reflec",                     tl: 10, price: 1500,   category: 3 }
+          - { name: "Ceramic Carapace",           tl: 12, price: 12000,  category: 3 }
+          - { name: "Boarding Vacc Suit (Improved)", tl: 12, price: 24000, category: 4 }
+          - { name: "Combat Armour (Basic)",      tl: 10, price: 96000,  category: 4, military: true }
+          - { name: "Combat Armour (Improved)",   tl: 12, price: 88000,  category: 4, military: true }
+          - { name: "Battle Dress (Basic)",       tl: 13, price: 200000, category: 5, military: true }
+          - { name: "Personal Energy Shield",     tl: 15, price: 320000, category: 4, specialised: true }
+      - title: Drugs
+        mode: black_market
+        pool:
+          - { name: "Combat Drug",            tl: 10, price: 1000,  category: 3, qty: "1D3" }
+          - { name: "Metabolic Accelerator",  tl: 10, price: 2000,  category: 3, qty: "1D3" }
+          - { name: "Slow Drug",              tl: 11, price: 500,   category: 3, qty: "1D3" }
+          - { name: "Fast Drug",              tl: 10, price: 200,   category: 2, qty: "1D3" }
+          - { name: "Adrenaliser",            tl: 10, price: 150,   category: 2, qty: "1D3" }
+          - { name: "Anagathics",             tl: 15, price: 20000, category: 4, specialised: true }
+          - { name: "Null Drug",              tl: 16, price: 5000,  category: 4, specialised: true }
+      - title: Explosives
+        mode: black_market
+        pool:
+          - { name: "Frag Grenade",           tl: 6,  price: 30,  category: 3, qty: "1D6" }
+          - { name: "Incendiary Grenade",     tl: 7,  price: 75,  category: 3, qty: "1D6" }
+          - { name: "EMP Grenade",            tl: 9,  price: 100, category: 4, qty: "1D3" }
+          - { name: "Neurotoxin Grenade",     tl: 9,  price: 250, category: P, qty: "1D2" }
+          - { name: "Plasma Grenade",         tl: 16, price: 500, category: 5, military: true, qty: "1D2" }
+
