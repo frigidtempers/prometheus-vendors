@@ -87,7 +87,95 @@ def weighted_sample(pool, count):
     return chosen
 
 
-def roll_section(section):
+# ---------------------------------------------------------------- black market
+# Central Supply Catalogue (2023) p.4-6: Availability and the Black Market.
+
+CATEGORY = {  # category: (black market DM, price multiplier)
+    "1": (4, 2), "2": (2, 3), "3": (0, 5), "4": (-2, 10), "5": (-4, 20), "P": (-6, 20),
+}
+
+
+def law_dm(law):
+    law = int(law)
+    if law <= 0:
+        return 2
+    if law <= 3:
+        return 1
+    if law <= 6:
+        return 0
+    if law <= 9:
+        return -1
+    return -2
+
+
+def tl_dm(item_tl, world_tl):
+    """Availability table TL modifiers. The CSC lists "TL greater than the
+    world's" (-1), "3-4 above" (-1), "5-9 above" (-2) and "10+ above" (-4);
+    this reads them as cumulative steps: +1-2: -1, +3-4: -2, +5-9: -3, +10: -5."""
+    diff = int(item_tl) - int(world_tl)
+    if diff <= 0:
+        return 0
+    if diff <= 2:
+        return -1
+    if diff <= 4:
+        return -2
+    if diff <= 9:
+        return -3
+    return -5
+
+
+def availability(item, market):
+    """Return (in_stock, price_multiplier_for_premium) for one item.
+    2D + dealer Streetwise + Law Level DM + category DM + availability DMs
+    must reach 8. A roll that misses by 1 or 2 is still offered, but only
+    at double or triple price (the CSC's "willing to pay double/triple" DMs)."""
+    cat = str(item.get("category", "3")).upper()
+    cat_dm = CATEGORY[cat][0]
+    dm = (int(market.get("streetwise", 2)) + law_dm(market.get("law_level", 0))
+          + cat_dm + tl_dm(item.get("tl", 0), market.get("world_tl", 8))
+          + int(market.get("other_dm", 0)) + int(item.get("fiat", 0)))
+    if item.get("military"):
+        dm -= 2
+    if item.get("specialised"):
+        dm -= 1
+    total = roll("2D") + dm
+    if total >= 8:
+        return True, 1
+    if total == 7 and market.get("premium", True):
+        return True, 2
+    if total == 6 and market.get("premium", True):
+        return True, 3
+    return False, 0
+
+
+def roll_black_market(section, market):
+    lines = []
+    found = []
+    for raw in section.get("pool", []) or []:
+        item = dict(raw) if isinstance(raw, dict) else {"name": str(raw)}
+        ok, premium = availability(item, market)
+        if ok:
+            found.append((item, premium))
+    limit = section.get("max")
+    if limit is not None and len(found) > int(limit):
+        found = random.sample(found, int(limit))
+    for item, premium in found:
+        qty = max(1, roll(item.get("qty", 1)))
+        line = f"{item['name']} x{qty}"
+        if item.get("price") is not None:
+            cat = str(item.get("category", "3")).upper()
+            mult = CATEGORY[cat][1] * premium * float(market.get("price_multiplier", 1))
+            price = int(round(float(item["price"]) * mult))
+            line += f" - {price:,}Cr" + (" each" if qty > 1 else "")
+            if premium > 1:
+                line += f" *(scarce: x{premium})*"
+        lines.append(line)
+    return lines
+
+
+def roll_section(section, vendor=None):
+    if section.get("mode") == "black_market":
+        return roll_black_market(section, (vendor or {}).get("market", {}))
     lines = []
     always = section.get("always", []) or []
     pool = section.get("pool", []) or []
@@ -124,7 +212,7 @@ def build_message(vendor):
         parts.append(vendor["notes"].strip())
     label = f"**{vendor['stock_label']}**" if vendor.get("stock_label") else None
     for section in vendor.get("sections", []):
-        lines = roll_section(section)
+        lines = roll_section(section, vendor)
         if not lines:
             continue
         block = "\n".join(lines)
